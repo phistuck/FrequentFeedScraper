@@ -17,8 +17,6 @@ class DetailsBackup(Details):
 
 class DefaultHandler(webapp2.RequestHandler):
  def get(self):
-  #self.response.write("""<!doctype html><iframe seamless width=95% height=95% src='/scrape?manual=1'></iframe>""")
-  #return
   self.response.write( \
 """<!doctype html>
  <html>
@@ -40,7 +38,7 @@ class ReadHandler(webapp2.RequestHandler):
  def get(self):
   details = DetailsBackup.all().get()
   if not details:
-   #logging.info("No backup.")
+   # No backup is available.
    details = Details.all().get();
   if details:
    self.response.headers["Content-Type"] = "text/xml"
