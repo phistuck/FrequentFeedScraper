@@ -30,7 +30,8 @@ body
  </head>
  <body>
   <h1>Frequent Feed Scraper</h1>
-  For getting all of the <a href="%s">Chromium Code Review</a> entries.<br/><br/>
+  For getting (hopefully) all of the <a href="%s">Chromium Code Review</a> entries.<br/><br/>
+  Usage - add <a href="http://frequentfeedscraper.appspot.com/read?feed=codereviews">http://frequentfeedscraper.appspot.com/read?feed=codereviews</a> to your feed reader.<br/><br/><br/>
   You can fork using <a href="https://github.com/phistuck/FrequentFeedScraper/">Git(Hub)</a>.
  </body>
 </html>""" % FEED_URL)
@@ -185,6 +186,6 @@ app = \
   [
    ("/scrape", ScrapeHandler),
    ("/read", ReadHandler),
-   ("/.*", DefaultHandler),
+   ("/", DefaultHandler),
   ],
   debug = True)
