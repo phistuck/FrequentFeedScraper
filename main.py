@@ -30,7 +30,8 @@ body
  </head>
  <body>
   <h1>Frequent Feed Scraper</h1>
-  For getting all of the <a href="%s">Chromium Code Review</a> entries.
+  For getting all of the <a href="%s">Chromium Code Review</a> entries.<br/><br/>
+  You can fork using <a href="https://github.com/phistuck/FrequentFeedScraper/">Git(Hub)</a>.
  </body>
 </html>""" % FEED_URL)
 
