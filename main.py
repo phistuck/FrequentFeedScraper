@@ -3,7 +3,7 @@ from datetime import timedelta
 from google.appengine.ext import db
 
 FEED_URL = "https://codereview.chromium.org/rss/all"
-MAX_ENTRIES = 900
+MAX_ENTRIES = 1000
 ONE_DAY = timedelta(days = 1)
 
 # Any changes to this model are automatically propagated to DetailsBackup
