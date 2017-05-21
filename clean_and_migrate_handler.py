@@ -22,7 +22,7 @@ class CleanAndMigrateHandler(webapp2.RequestHandler):
    if str(source.name) in names:
     source.delete()
    names[str(source.name)] = source
-  self.response.write('Cleaned duplicate names.')
+  self.response.write('Cleaned duplicate names.<br/>')
 
   # Migrate Details and DetailsBackup to FeedSource
   legacy_feed = Details.all().get()
@@ -37,11 +37,11 @@ class CleanAndMigrateHandler(webapp2.RequestHandler):
     store_feed(source, feed, source.last_fetched)
     store_backup_feed(source, legacy_feed_backup.deprecation_date)
     source.feed.get().delete()
-    self.response.write('Migrated a backup feed.')
+    self.response.write('Migrated a backup feed.<br/>')
   if legacy_feed:
     feed = Feed()
     feed.xml = legacy_feed.feed
     feed.urls = legacy_feed.urls
     feed.source = source
     store_feed(source, feed, source.last_fetched)
-    self.response.write('Migrated a feed.')
+    self.response.write('Migrated a feed.<br/>')
