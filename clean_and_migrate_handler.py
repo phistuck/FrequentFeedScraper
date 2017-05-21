@@ -37,11 +37,11 @@ class CleanAndMigrateHandler(webapp2.RequestHandler):
     store_feed(source, feed, source.last_fetched)
     store_backup_feed(source, legacy_feed_backup.deprecation_date)
     source.feed.get().delete()
-    logging.info('Migrated a backup feed.')
+    self.response.write('Migrated a backup feed.')
   if legacy_feed:
     feed = Feed()
     feed.xml = legacy_feed.feed
     feed.urls = legacy_feed.urls
     feed.source = source
     store_feed(source, feed, source.last_fetched)
-    logging.info('Migrated a feed.')
+    self.response.write('Migrated a feed.')
