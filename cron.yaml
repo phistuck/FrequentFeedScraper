@@ -1,4 +1,4 @@
 cron:
-- description: Scrape feeds.
-  url: /scrape
-  schedule: every 1 minutes
+  #- description: Scrape feeds.
+  #url: /scrape
+  #schedule: every 1 minutes
