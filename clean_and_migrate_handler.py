@@ -1,5 +1,6 @@
 import webapp2, logging
-from database import store_feed_source
+from database import store_feed_source, store_feed, \
+ store_backup_feed
 
 class CleanAndMigrateHandler(webapp2.RequestHandler):
  def get(self):
@@ -34,7 +35,7 @@ class CleanAndMigrateHandler(webapp2.RequestHandler):
     feed.urls = legacy_feed_backup.urls
     feed.source = source
     store_feed(source, feed, source.last_fetched)
-    store_feed_backup(source, legacy_feed_backup.deprecation_date)
+    store_backup_feed(source, legacy_feed_backup.deprecation_date)
     source.feed.get().delete()
     logging.info('Migrated a backup feed.')
   if legacy_feed:
