@@ -16,7 +16,7 @@ def get_node_text(node):
   return text
  return ''
 
-def get_filtered_feed(feed, filter):
+def get_title_filtered_feed(feed, filter):
  exact_filter = filter[6:]
  feed_dom = get_feed_dom(feed)
  entries = feed_dom.getElementsByTagName('entry')
@@ -30,7 +30,7 @@ class ReadHandler(webapp2.RequestHandler):
  def get(self):
   from database import FeedSource
   name = self.request.get('feed')
-  filter = self.request.get('filter')
+  title_filter = self.request.get('title_filter')
   source = get_feed_source_by_name(name)
   if not source:
    return self.error(404)
@@ -47,13 +47,14 @@ class ReadHandler(webapp2.RequestHandler):
   if feed:
    xml = feed.xml
    self.response.headers["Content-Type"] = "text/xml"
-   if filter:
+   if title_filter:
     # Some day, perhaps add regular expression support.
-    if not unicode.startswith(filter, 'exact:'):
+    if not unicode.startswith(title_filter, 'exact:'):
       self.error(501)
       self.response.write( \
        'Error! Unsupported filter value. ' + \
-       'Only exact filters (filter=exact:...) are supported at the moment.')
+       'Only exact title filters (title_filter=exact:...) ' + \
+       'are supported at the moment.')
       return
     xml = get_filtered_feed(xml, filter)
    self.response.write(xml)
