@@ -25,7 +25,7 @@ class FeedBackup(BaseFeed):
 def get_unfetched_feeds(timestamp):
  return db.Query(FeedSource).filter('earliest_next_fetch <', timestamp)
 
-def store_feed(source, feed, timestamp):
+def store_feed(source, feed, timestamp, error_comment = ''):
  from google.appengine.api import memcache, datastore_errors
  from google.appengine.runtime import apiproxy_errors
  try:
@@ -43,7 +43,7 @@ def store_feed(source, feed, timestamp):
  # Backing up the last full feed and starting anew.
  except (apiproxy_errors.RequestTooLargeError,
          datastore_errors.BadRequestError) as e:
-  logging.error(e);
+  logging.error(str(e) + error_comment);
   return False
 
 def store_backup_feed(source, timestamp):

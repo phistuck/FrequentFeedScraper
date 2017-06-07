@@ -1,5 +1,7 @@
 import webapp2, logging
-from constants import MAXIMAL_ENTRY_COUNT, MINIMAL_ENTRY_COUNT, ONE_DAY
+from constants import \
+ MAXIMAL_ENTRY_COUNT, MINIMAL_ENTRY_COUNT, ONE_DAY, \
+ MAXIMAL_ENTRY_COUNT_DECREMENT
 from database import get_unfetched_feeds, store_feed, store_backup_feed
 
 def fetch(url):
@@ -57,9 +59,9 @@ def update_full_feed(full_feed_dom, current_feed_dom, previous_urls):
    "More than 19 new entries - " + str(i) +
    ", something might have been missed.") 
 
-def store(source, feed, full_feed_dom, timestamp):
+def store(source, feed, full_feed_dom, timestamp, error_comment = ''):
   feed.xml = full_feed_dom.toxml()
-  has_succeeded = store_feed(source, feed, timestamp)
+  has_succeeded = store_feed(source, feed, timestamp, error_comment)
   try:
    # Storing in the memory for quick access.
    memcache.set("last-feed", current_feed)
@@ -78,8 +80,10 @@ def store_full_feed(source, feed, full_feed_dom, previous_urls, timestamp):
  while not has_stored_feed and \
        maximal_entry_count > MINIMAL_ENTRY_COUNT:
   cap_feed(full_feed_dom, maximal_entry_count)
-  maximal_entry_count = maximal_entry_count - 1
-  has_stored_feed = store(source, feed, full_feed_dom, timestamp)
+  maximal_entry_count = maximal_entry_count - \
+   MAXIMAL_ENTRY_COUNT_DECREMENT
+  has_stored_feed = \
+   store(source, feed, full_feed_dom, timestamp, str(maximal_entry_count))
  
  return has_stored_feed
 
