@@ -56,5 +56,5 @@ class ReadHandler(webapp2.RequestHandler):
        'Only exact title filters (title_filter=exact:...) ' + \
        'are supported at the moment.')
       return
-    xml = get_filtered_feed(xml, filter)
+    xml = get_title_filtered_feed(xml, title_filter)
    self.response.write(xml)
