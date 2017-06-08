@@ -1,10 +1,6 @@
 import webapp2, logging
 from database import get_feed_source_by_name
-
-# TODO - combine and move this duplication to utils.
-def get_feed_dom(feed):
- from xml.dom import minidom
- return minidom.parseString(feed.encode('utf-8'))
+from utils import get_feed_dom
 
 def get_node_text(node):
  if node.nodeType == 3:

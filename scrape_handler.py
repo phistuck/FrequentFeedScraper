@@ -1,19 +1,29 @@
-import webapp2, logging
+import webapp2, logging, sys
 from constants import \
  MAXIMAL_ENTRY_COUNT, MINIMAL_ENTRY_COUNT, ONE_DAY, \
  MAXIMAL_ENTRY_COUNT_DECREMENT
 from database import get_unfetched_feeds, store_feed, store_backup_feed
+from utils import get_feed_dom
 
 def fetch(url):
  from google.appengine.api import urlfetch
- result = urlfetch.fetch(url)
- if not result.status_code == 200:
-  raise error("Fetch failed, status code - " + str(result.status_code) + ".")
- return result.content
 
-def get_feed_dom(feed):
- from xml.dom import minidom
- return minidom.parseString(feed)
+ try:
+  result = urlfetch.fetch(url)
+ except:
+  logging.error("Fetch failed miserably.")
+  logging.error(sys.exc_info()[0])
+  logging.error(sys.exc_info()[1])
+
+ status_code = result.status_code
+ content = result.content or ''
+ if status_code > 199 and status_code < 300 and content:
+  return content
+ 
+ logging.error( \
+  "Fetch failed. Status code - %s. Content[:100] - %s." % \
+   (str(status_code), content[:100]))
+ return None
 
 def clean_up_deprecated_state_if_appropriate(source):
  from datetime import datetime
@@ -94,7 +104,7 @@ def get_full_feed(source, current_feed_dom, current_feed):
  if full_feed:
   import json
   has_full_feed = True
-  full_feed_dom = get_feed_dom(full_feed.xml.encode('utf-8'))
+  full_feed_dom = get_feed_dom(full_feed.xml)
   previous_urls = json.loads(full_feed.urls)
  else:
   from database import Feed
@@ -113,13 +123,16 @@ def scrape(source, manual):
  url = source.url
  timestamp = datetime.now()
  current_feed = fetch(url)
+ 
+ if not current_feed:
+  return False
 
  if not manual:
   memcache.set('last-' + url, datetime.utcnow())
 
  if memcache.get('last-feed-' + url) == current_feed:
   # No updates.
-  return
+  return True
 
  clean_up_deprecated_state_if_appropriate(source)
 
