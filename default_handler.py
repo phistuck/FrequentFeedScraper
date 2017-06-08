@@ -4,7 +4,7 @@ from database import FeedSource
 
 class DefaultHandler(webapp2.RequestHandler):
  def get(self):
-  host = 'http://frequentfeedscraper.appspot.com'
+  host = 'https://frequentfeedscraper.appspot.com'
   self.response.write( \
 """<!doctype html>
  <html>
