@@ -19,7 +19,7 @@ def fetch(url):
  status_code = result.status_code
  content = result.content or ''
  if status_code > 199 and status_code < 300 and content:
-  return content
+  return content.decode('utf-8')
  
  logging.error( \
   "Fetch failed. Status code - %s. Content[:100] - %s." % \
