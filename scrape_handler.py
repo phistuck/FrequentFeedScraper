@@ -14,6 +14,7 @@ def fetch(url):
   logging.error("Fetch failed miserably.")
   logging.error(sys.exc_info()[0])
   logging.error(sys.exc_info()[1])
+  return None
 
  status_code = result.status_code
  content = result.content or ''
