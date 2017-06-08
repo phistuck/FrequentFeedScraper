@@ -3,6 +3,9 @@ api_version: 1
 threadsafe: yes
 
 handlers:
+- url: /favicon\.ico$
+  static_files: static/favicon.ico
+  upload: favicon\.ico$
 - url: /add.*
   script: main.app
   login: admin
