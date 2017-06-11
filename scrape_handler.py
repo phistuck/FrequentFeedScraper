@@ -73,11 +73,6 @@ def update_full_feed(full_feed_dom, current_feed_dom, previous_urls):
 def store(source, feed, full_feed_dom, timestamp, error_comment = ''):
   feed.xml = full_feed_dom.toxml()
   has_succeeded = store_feed(source, feed, timestamp, error_comment)
-  try:
-   # Storing in the memory for quick access.
-   memcache.set("last-feed", current_feed)
-  except:
-   pass
   return has_succeeded
 
 def store_full_feed(source, feed, full_feed_dom, previous_urls, timestamp):
@@ -116,6 +111,15 @@ def get_full_feed(source, current_feed_dom, current_feed):
   previous_urls = {}
  
  return (full_feed, full_feed_dom, has_full_feed, previous_urls);
+ 
+def store_feed_in_memory(source, current_feed):
+ from google.appengine.api import memcache
+ try:
+  # Storing in the memory for quick access.
+  memcache.set('last-feed-' + source.url, current_feed)
+ except:
+  pass
+
 
 def scrape(source, manual):
  from google.appengine.api import memcache
@@ -144,6 +148,7 @@ def scrape(source, manual):
  
  update_full_feed(full_feed_dom, current_feed_dom, previous_urls)
  if store_full_feed(source, full_feed, full_feed_dom, previous_urls, timestamp):
+  store_feed_in_memory(source, current_feed);
   return True
 
  logging.info(
@@ -162,6 +167,7 @@ def scrape(source, manual):
   if not has_full_feed or \
      store_full_feed(source, full_feed, current_feed_dom, previous_urls, \
       timestamp):
+   store_feed_in_memory(source, current_feed)
    logging.info('Oops. Even the current feed is too large. Giving up.')
    return False
   return True
