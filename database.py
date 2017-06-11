@@ -84,3 +84,9 @@ def store_feed_source(name, url, frequency_ms):
   frequency_ms = frequency_ms, last_fetched = last_fetched)
  source.put()
  return True
+
+def change_feed_source_url(source, url):
+ source.url = url
+ source.put()
+ return True
+
