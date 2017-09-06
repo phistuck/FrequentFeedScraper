@@ -9,7 +9,7 @@ def get_node_text(node):
   text = ''
   for childNode in node.childNodes:
    text += get_node_text(childNode)
-  return text
+  return unicode(text)
  return ''
 
 def get_title_filtered_feed(feed, filter):
